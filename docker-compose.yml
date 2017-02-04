@@ -1,0 +1,17 @@
+version: '2'
+services:
+    na-rest:
+        build: 'REST'
+        ports: 
+            - '3000:3000'
+        links: 
+            - mongo
+    na-spa:
+        build: 'SPA'
+        ports: 
+            - '8000:8000'                
+    mongo:
+        image: mongo
+        ports:
+            - "27017:27017"
+        command: "--smallfiles --logpath=/dev/null"

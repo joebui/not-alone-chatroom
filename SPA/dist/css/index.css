@@ -1,0 +1,85 @@
+.form-signin-heading {
+    text-align: center;
+}
+
+.navbar-inverse {
+    background-color: #202020;
+    border-color: #202020;
+}
+
+.navbar-inverse .navbar-brand {
+    color: white;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+    color: white;
+}
+
+.form-control {
+    border-radius: 0;
+}
+
+.login-form {
+    max-width: 400px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.btn {
+    border-radius: 0;
+}
+
+.alert {
+    border-radius: 0;
+}
+
+.container .text-muted {
+    margin: 20px 0;
+}
+
+/* chat */
+.chat {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.chat li {
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px dotted #B3A9A9;
+}
+
+.chat li .chat-body p {
+    margin: 0;
+    color: #777777;
+}
+
+.panel {
+    border-radius: 0;
+    border-color: #202020;
+}
+
+.panel-heading {
+    border-radius: 0;    
+}
+
+.panel-primary>.panel-heading {
+    background-color: #202020;
+    border-color: #202020;
+}
+
+.panel .slidedown .glyphicon, .chat .glyphicon {
+    margin-right: 5px;
+}
+
+.panel-body {
+    overflow-y: scroll;
+    height: 500px;
+}
+
+.panel-body-online {
+    overflow-y: scroll;
+    height: 250px;
+    padding: 15px;
+}
