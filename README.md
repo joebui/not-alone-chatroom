@@ -9,7 +9,7 @@ the RESTful web service written in NodeJS, SPA folder contains the single-page a
 
 -   Ensure that you have the LTS version of NodeJS (6.x.x)
 -   Go to REST/config/default.json and configure url to your MongoDB database
--   Ensure that you create database "not-alone" and 2 collections named "user" and "chat" respectively for that datbase
+-   Ensure that you create database "not-alone" and 2 collections named "user" and "chat" respectively for that database
 -   Go to REST folder and type this command to install packages (apply the same procedure for SPA folder)
 ```
 $ npm install
