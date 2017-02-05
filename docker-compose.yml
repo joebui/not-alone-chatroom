@@ -1,12 +1,12 @@
 version: '2'
 services:
-    na-rest:
+    rest:
         build: 'REST'
         ports: 
             - '3000:3000'
         links: 
             - mongo
-    na-spa:
+    spa:
         build: 'SPA'
         ports: 
             - '8000:8000'                
