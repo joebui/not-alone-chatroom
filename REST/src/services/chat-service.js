@@ -10,11 +10,11 @@ class ChatService {
     getChatHistory(username) {
         return new Promise((resolve, reject) => {
             chatRepository.getChatHistory()
-                .then((chat) => {
-                    var i
-                    for (i = 0; i < chat.length; i++) {
-                        if (chat[i].username === username) {
-                            chat[i].username = 'me'
+                .then((chat) => {                    
+                    let msg
+                    for (msg of chat) {
+                        if (msg.username === username) {
+                            msg.username = 'me'
                         }
                     }
 
