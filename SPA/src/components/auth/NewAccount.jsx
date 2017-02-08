@@ -4,9 +4,11 @@ import { Button, FormControl } from 'react-bootstrap'
 
 import Header from '../shared/Header.jsx'
 import { updateUsername, updatePassword, updateRetypePassword, createAccount, resetState, resetFieldValue } from '../../actions/authAction'
+import removeToken from '../../utilities/removeToken'
 
 class NewAccount extends Component {
     componentWillMount() {
+        removeToken()
         this.props.dispatch(resetState())
     }
 

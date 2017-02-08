@@ -2,6 +2,8 @@ const Promise = require('promise')
 
 const chatRepository = require('../../DAL/repositories/chat-repository')
 
+const onlineList = []
+
 class ChatService {
     addMessage(message) {
         chatRepository.addMessage(message)
@@ -10,7 +12,7 @@ class ChatService {
     getChatHistory(username) {
         return new Promise((resolve, reject) => {
             chatRepository.getChatHistory()
-                .then((chat) => {                    
+                .then((chat) => {
                     let msg
                     for (msg of chat) {
                         if (msg.username === username) {
@@ -24,6 +26,20 @@ class ChatService {
                     reject({ message: err })
                 })
         })
+    }
+
+    getOnlineList() {
+        return onlineList
+    }
+
+    addOnlineMember(username) {
+        if (onlineList.indexOf(username) === -1)
+            onlineList.push(username)
+    }
+
+    removeOnlineMember(username) {
+        var index = onlineList.indexOf(username)
+        onlineList.splice(index, 1)
     }
 }
 

@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { socketConnect } from 'socket.io-react'
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap'
 
 import { addMessage, addFriendMessage, showChatHistory } from '../../actions/chatAction'
 import Header from '../shared/Header.jsx'
 import MessageBubble from './message/MessageBubble.jsx'
 import SendMessage from './SendMessage.jsx'
+import OnlineList from './OnlineList.jsx'
 
 class Chat extends Component {
     componentWillMount() {
@@ -16,13 +17,12 @@ class Chat extends Component {
         dispatch(showChatHistory())
 
         socket.on('receiveMessage', (msg) => {
-            if (msg.username !== currentUser)
-                dispatch(addFriendMessage(msg))
+            if (msg.username !== currentUser) dispatch(addFriendMessage(msg))
         })
     }
 
     render() {
-        const {chat} = this.props
+        const {dispatch, chat} = this.props
 
         return (
             <div>
@@ -55,11 +55,7 @@ class Chat extends Component {
                                     Online
                                 </div>
                                 <div className="panel-body-online">
-                                    <ul className="chat">
-                                        <li className="left clearfix">dienbui</li>
-                                        <li className="left clearfix">dienbui</li>
-                                        <li className="left clearfix">dienbui</li>
-                                    </ul>
+                                    <OnlineList socket={this.props.socket} dispatch={dispatch} chat={chat} />
                                 </div>
                             </div>
                         </Col>

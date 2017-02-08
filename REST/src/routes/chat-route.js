@@ -13,7 +13,7 @@ module.exports = (app, socket) => {
     })
 
     app.post('/api/chats', chatValidation.chatForm, (req, res) => {
-        let message = { username: req.body.username, message: req.body.message, dateTime: req.body.dateTime }
+        let message = { username: req.decoded.username, message: req.body.message, dateTime: req.body.dateTime }
         if (!req.form.isValid) {
             res.status(401).json(req.form.errors)
         } else {
@@ -21,5 +21,21 @@ module.exports = (app, socket) => {
             chatService.addMessage(message)
             res.status(200).json({ message: 'broadcast message successfully' })
         }
+    })
+
+    app.get('/api/online', (req, res) => {
+        res.status(200).json(chatService.getOnlineList())
+    })
+
+    app.post('/api/online', (req, res) => {
+        chatService.addOnlineMember(req.decoded.username)
+        socket.emit('addOnlineUser', req.decoded.username)
+        res.status(200).json({ message: 'add online member successfully' })
+    })
+
+    app.delete('/api/online', (req, res) => {        
+        chatService.removeOnlineMember(req.decoded.username)
+        socket.emit('removeOnlineUser', req.decoded.username)
+        res.status(200).json({ message: 'remove online member successfully' })
     })
 }
