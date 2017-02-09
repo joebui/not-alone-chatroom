@@ -28,7 +28,7 @@ class AuthService {
                     passwordChecking(body.password, user.password)
                         .then((res) => {
                             if (res) {
-                                value = userLoginModel(user._id, user.username)
+                                value = userLoginModel(user.username)
                                 value.token = tokenGenerator(value)
                                 resolve(value)
                             } else {
@@ -63,7 +63,7 @@ class AuthService {
 
                             /** Add new user to DB */
                             authRepo.createAccount(body).then((user) => {
-                                var value = userLoginModel(user.id, body.username)
+                                var value = userLoginModel(body.username)
                                 value.token = tokenGenerator(value)
                                 resolve(value)
                             })

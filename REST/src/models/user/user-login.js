@@ -1,6 +1,5 @@
 module.exports = (id, username) => {
-    return {
-        _id: id,
+    return {        
         username: username
     }
 }
