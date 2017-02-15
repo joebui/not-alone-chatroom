@@ -3,7 +3,7 @@ import { Link } from 'react-router'
 
 import * as constants from '../../utilities/constants'
 import TokenNavBar from './TokenNavBar.jsx'
-import NoTokenNavBar from './NoTokenNavBar.jsx';
+import NoTokenNavBar from './NoTokenNavBar.jsx'
 
 export default class Header extends Component {
     render() {
@@ -29,6 +29,6 @@ export default class Header extends Component {
                     </div>
                 </div>
             </nav>
-        );
+        )
     }
 }

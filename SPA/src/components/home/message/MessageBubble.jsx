@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 
 import UserMessage from './UserMessage.jsx'
-import FriendMessage from './FriendMessage.jsx';
+import FriendMessage from './FriendMessage.jsx'
 
 class MessageBubble extends Component {
     render() {
