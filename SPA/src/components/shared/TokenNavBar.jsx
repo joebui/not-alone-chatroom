@@ -10,7 +10,7 @@ class TokenNavBar extends Component {
                 <li><Link>Welcome, {username}</Link></li>
                 <li><Link to={'/login'}>Logout</Link></li>
             </ul>
-        );
+        )
     }
 }
 

@@ -16,6 +16,8 @@ import NewAccount from './components/auth/NewAccount.jsx'
 const store = configureStore()
 const socket = io.connect(BASE_URL)
 
+if (Notification.permission !== 'denied') Notification.requestPermission()
+
 render(
     <Provider store={store}>
         <SocketProvider socket={socket}>

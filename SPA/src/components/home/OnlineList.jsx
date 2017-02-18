@@ -14,8 +14,7 @@ class OnlineList extends Component {
             if (user !== currentUser) dispatch(chatAction.addNewOnlineMember(user))
         })
 
-        socket.on('removeOnlineUser', (user) => {
-            console.log('socket');
+        socket.on('removeOnlineUser', (user) => {            
             dispatch(chatAction.removeFriendFromOnlineList(user))
         })
 
@@ -28,7 +27,7 @@ class OnlineList extends Component {
         const {chat} = this.props
 
         return (
-            <div>
+            <div id="online-list" className="panel-body-online">
                 <ul className="chat">
                     {
                         chat.online.map((item, index) =>
@@ -43,10 +42,25 @@ class OnlineList extends Component {
     componentWillUnmount() {
         chatAction.removeYouFromOnlineList()
     }
+
+    componentDidMount() {
+        this.scrollOnlineListToBottom()
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        this.scrollOnlineListToBottom()
+    }
+
+    scrollOnlineListToBottom() {
+        const panel = document.getElementById('online-list')
+        panel.scrollTop = panel.scrollHeight
+    }
 }
 
 OnlineList.propTypes = {
-
+    socket: React.PropTypes.any.isRequired,
+    dispatch: React.PropTypes.any.isRequired,
+    chat: React.PropTypes.object.isRequired
 }
 
 export default OnlineList

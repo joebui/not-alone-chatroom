@@ -1,15 +1,14 @@
-import validator from 'validator'
-
 import * as types from './actionTypes'
 import * as accountService from '../services/authService'
 import saveToLocalStorage from '../utilities/saveToLocalStorage'
+import * as authValidation from '../utilities/validation'
 
 let username = ''
 let password = ''
 let retypePassword = ''
 
 export function authenticate(redirectToChat) {
-    var result = loginValidation()
+    var result = authValidation.loginValidation(username, password)
 
     if (result.success) {
         var data = JSON.stringify({ username: username.trim(), password: password.trim() })
@@ -20,7 +19,7 @@ export function authenticate(redirectToChat) {
 }
 
 export function createAccount(redirectToChat) {
-    var result = createAccountValidation()
+    var result = authValidation.createAccountValidation(username, password, retypePassword)
 
     if (result.success) {
         var data = JSON.stringify({ username: username.trim(), password: password.trim() })
@@ -48,38 +47,10 @@ export function updateRetypePassword(e) {
     retypePassword = e.target.value
 }
 
-function loginValidation() {
-    var result = {}
-    var isUsernameEmpty = validator.isEmpty(username)
-    var isPasswordEmpty = validator.isEmpty(password)
-
-    if (isUsernameEmpty) result.usernameMessage = 'Username is required'
-
-    if (isPasswordEmpty) result.passwordMessage = 'Password is required'
-
-    if (!isUsernameEmpty && !isPasswordEmpty) result.success = true
-
-    return result
-}
-
-function createAccountValidation() {
-    var result = {}
-    var isUsernameEmpty = validator.isEmpty(username)
-    var isPasswordEmpty = validator.isEmpty(password)
-    var isPasswordLength = validator.isLength(password, { min: 5, max: 50 })
-    var isTwoPasswordsEqual = validator.equals(retypePassword, password);
-
-    if (isUsernameEmpty) result.usernameMessage = 'Username is required'
-
-    if (isPasswordEmpty) result.passwordMessage = 'Password is required'
-
-    if (!isPasswordLength) result.passwordMessage = 'Length of password must be at least 5'
-
-    if (!isTwoPasswordsEqual) result.retypePasswordMessage = 'Retype password and password do not match'
-
-    if (!isUsernameEmpty && !isPasswordEmpty && isTwoPasswordsEqual) result.success = true
-
-    return result
+export function resetFieldValue() {
+    username = ''
+    password = ''
+    retypePassword = ''
 }
 
 function authSuccess(res) {
@@ -104,10 +75,4 @@ function authInvalidInput(result) {
         type: types.AUTH_INVALID_INPUT,
         result: result
     }
-}
-
-export function resetFieldValue() {
-    username = ''
-    password = ''
-    retypePassword = ''
 }

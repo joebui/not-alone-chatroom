@@ -19,7 +19,9 @@ class FriendMessage extends Component {
 }
 
 FriendMessage.propTypes = {
-
+    message: React.PropTypes.string.isRequired,
+    username: React.PropTypes.string.isRequired,
+    dateTime: React.PropTypes.string.isRequired
 }
 
 export default FriendMessage

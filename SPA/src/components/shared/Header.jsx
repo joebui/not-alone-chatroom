@@ -17,7 +17,10 @@ export default class Header extends Component {
                             <span className="icon-bar"></span>
                             <span className="icon-bar"></span>
                         </button>
-                        <Link className="navbar-brand" to={'/'}>{constants.APPNAME}</Link>
+                        <Link className="navbar-brand" to={'/'}>
+                            <img src="images/logo.png" id="logo" alt="logo" />
+                            {constants.APPNAME}
+                        </Link>
                     </div>
                     <div id="navbar" className="collapse navbar-collapse">
                         <ul className="nav navbar-nav"></ul>

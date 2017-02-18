@@ -1,13 +1,13 @@
 import { compose, createStore, applyMiddleware } from 'redux'
-import thunkMiddleware from 'redux-thunk';
+import thunkMiddleware from 'redux-thunk'
 
 import mainReducer from '../reducers'
 
 const createAppStore = compose(
 	applyMiddleware(thunkMiddleware)
-)(createStore);
+)(createStore)
 
 export default function configureStore() {
-	const store = createAppStore(mainReducer);
-	return store;
-};
+	const store = createAppStore(mainReducer)
+	return store
+}

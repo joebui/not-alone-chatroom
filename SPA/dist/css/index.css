@@ -3,8 +3,8 @@
 }
 
 .navbar-inverse {
-    background-color: #202020;
-    border-color: #202020;
+    background-color: #24292e;
+    border-color: #24292e;
 }
 
 .navbar-inverse .navbar-brand {
@@ -57,7 +57,7 @@
 
 .panel {
     border-radius: 0;
-    border-color: #202020;
+    border-color: #24292e;
 }
 
 .panel-heading {
@@ -65,8 +65,8 @@
 }
 
 .panel-primary>.panel-heading {
-    background-color: #202020;
-    border-color: #202020;
+    background-color: #24292e;
+    border-color: #24292e;
 }
 
 .panel .slidedown .glyphicon, .chat .glyphicon {
@@ -82,4 +82,11 @@
     overflow-y: scroll;
     height: 250px;
     padding: 15px;
+}
+
+#logo {
+    max-width: 35px;
+    margin-top: -7px;
+    display: inline-block;
+    margin-right: 10px;
 }

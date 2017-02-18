@@ -4,6 +4,7 @@ import { socketConnect } from 'socket.io-react'
 import { Row, Col } from 'react-bootstrap'
 
 import { addMessage, addFriendMessage, showChatHistory } from '../../actions/chatAction'
+import sendNotification from '../../utilities/notification'
 import Header from '../shared/Header.jsx'
 import MessageBubble from './message/MessageBubble.jsx'
 import SendMessage from './SendMessage.jsx'
@@ -13,11 +14,18 @@ class Chat extends Component {
     componentWillMount() {
         const {dispatch, socket} = this.props
         const currentUser = localStorage.username
+        let isActive = true
+
+        window.onfocus = () => { isActive = true }
+        window.onblur = () => { isActive = false }
 
         dispatch(showChatHistory())
 
         socket.on('receiveMessage', (msg) => {
-            if (msg.username !== currentUser) dispatch(addFriendMessage(msg))
+            if (msg.username !== currentUser) {
+                dispatch(addFriendMessage(msg))
+                if (!isActive) sendNotification(msg)
+            }
         })
     }
 
@@ -35,7 +43,7 @@ class Chat extends Component {
                                 <div className="panel-heading">
                                     Chat
                                 </div>
-                                <div className="panel-body">
+                                <div id="chat-body" className="panel-body">
                                     <ul className="chat">
                                         {
                                             chat.conversation.map((mes, index) =>
@@ -54,20 +62,31 @@ class Chat extends Component {
                                 <div className="panel-heading">
                                     Online
                                 </div>
-                                <div className="panel-body-online">
-                                    <OnlineList socket={this.props.socket} dispatch={dispatch} chat={chat} />
-                                </div>
+                                <OnlineList socket={this.props.socket} dispatch={dispatch} chat={chat} />
                             </div>
                         </Col>
                     </Row>
                 </div>
             </div>
-        );
+        )
+    }
+
+    componentDidMount() {
+        this.scrollConversationToBottom()
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        this.scrollConversationToBottom()
     }
 
     addNewMessage() {
         const {dispatch} = this.props
         dispatch(addMessage())
+    }
+
+    scrollConversationToBottom() {
+        const panel = document.getElementById('chat-body')
+        panel.scrollTop = panel.scrollHeight
     }
 }
 

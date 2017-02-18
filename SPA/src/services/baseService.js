@@ -13,7 +13,7 @@ export default function baseService(method, link, data) {
             method: method,
             url: link,
             headers: { 'Authorization': 'Bearer ' + token }
-        });
+        })
     }
 
     return axios({
@@ -21,5 +21,5 @@ export default function baseService(method, link, data) {
         url: link,
         data: data,
         headers: { 'Authorization': 'Bearer ' + token }
-    });
+    })
 }
