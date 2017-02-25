@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { Button, FormControl } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
+import { Control, Form, Errors } from 'react-redux-form'
 
 import Header from '../shared/Header.jsx'
 import * as authAction from '../../actions/authAction'
@@ -9,40 +10,60 @@ import removeToken from '../../utilities/removeToken'
 class NewAccount extends Component {
     componentWillMount() {
         removeToken()
-        this.props.dispatch(authAction.resetState())
     }
 
     render() {
-        const {auth} = this.props
+        const usernameRequired = (val) => val && val.length
+        const passwordRequired = (val) => val && val.length > 5
 
         return (
             <div>
                 <Header />
-                <div className="login-form">
-                    <h2 className="form-signin-heading">CREATE ACCOUNT</h2>
-                    {auth.message ? <div className="alert alert-danger" role="alert">{auth.message}</div> : null}
+                <Form model="deep.newAccount" onSubmit={(val) => this.handleCreateAccountSubmit(val)} className="login-form"
+                    validators={{
+                        '': { passwordsMatch: (vals) => vals.retypePassword === vals.password }
+                    }}>
 
-                    <FormControl id="username" name="username" type="text" placeholder="Username" onChange={authAction.updateUsername} maxLength="50"
-                        onKeyPress={(event) => this.pressEnter(event)} />
-                    {auth.usernameMessage ? <p className="text-danger">{auth.usernameMessage}</p> : <br />}
-
-                    <FormControl id="password" name="password" type="password" placeholder="Password" onChange={authAction.updatePassword} maxLength="50"
-                        onKeyPress={(event) => this.pressEnter(event)} />
-                    {auth.passwordMessage ? <p className="text-danger">{auth.passwordMessage}</p> : <br />}
-
-                    <FormControl id="re-password" name="re-password" type="password" placeholder="Retype password" onChange={authAction.updateRetypePassword} maxLength="50"
-                        onKeyPress={(event) => this.pressEnter(event)} />
-                    {auth.retypePasswordMessage ? <p className="text-danger">{auth.retypePasswordMessage}</p> : null}
+                    <h2 className="form-signin-heading">NEW ACCOUNT</h2>
+                    <Control.text model=".username" maxLength="50" className="form-control" placeholder="Username"
+                        validators={{
+                            usernameRequired
+                        }}
+                        validateOn="change" />
+                    <Errors className="text-danger"
+                        model=".username"
+                        messages={{ usernameRequired: "Username is required!" }}
+                        show="touched"
+                    />
 
                     <br />
-                    <Button bsStyle="primary" bsSize="large" block onClick={() => this.createAccountFormSubmit()}>Create and sign in</Button>
-                </div>
+
+                    <Control type="password" model=".password" maxLength="50" className="form-control" placeholder="Password"
+                        validators={{
+                            passwordRequired
+                        }}
+                        validateOn="change" />
+                    <Errors className="text-danger"
+                        model=".password"
+                        messages={{ passwordRequired: "Password must have more than 5 characters!" }}
+                        show="touched"
+                    />
+
+                    <br />
+
+                    <Control type="password" model=".retypePassword" maxLength="50" className="form-control" placeholder="Retype password"
+                        validateOn="change" />
+                    <Errors className="text-danger"
+                        model="deep.newAccount"
+                        messages={{ passwordsMatch: "Retype password does not match" }}
+                        show="touched"
+                    />
+
+                    <br />
+                    <Button bsStyle="primary" bsSize="large" block type="submit">Create</Button>
+                </Form>
             </div>
         )
-    }
-
-    componentWillUnmount() {
-        authAction.resetFieldValue()
     }
 
     redirectToChat() {
@@ -50,26 +71,12 @@ class NewAccount extends Component {
         router.push('/')
     }
 
-    createAccountFormSubmit() {
+    handleCreateAccountSubmit(value) {
         const {dispatch} = this.props
-        dispatch(authAction.createAccount(() => this.redirectToChat()))
-    }
-
-    pressEnter(event) {
-        if (event.key == 'Enter') {
-            this.createAccountFormSubmit()
-        }
+        dispatch(authAction.createAccount(value, () => this.redirectToChat()))
     }
 }
 
-NewAccount.propTypes = {
-    auth: React.PropTypes.object.isRequired
-}
+NewAccount.propTypes = {}
 
-function select(state) {
-    return {
-        auth: state.authReducer
-    }
-}
-
-export default connect(select)(NewAccount)
+export default connect()(NewAccount)

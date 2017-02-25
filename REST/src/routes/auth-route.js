@@ -10,18 +10,14 @@ module.exports = (app) => {
      * Success: return {username, token}
      * Error: return {message}
      */
-    app.post('/auth', loginValidation.loginForm, (req, res) => {
-        if (!req.form.isValid) {
-            res.status(401).json(req.form.errors)
-        } else {
-            authService.authenticateUser(req.body)
-                .then((value) => {
-                    res.json(value)
-                })
-                .catch((err) => {
-                    res.json(err)
-                })
-        }
+    app.post('/auth', (req, res) => {
+        authService.authenticateUser(req.body)
+            .then((value) => {
+                res.json(value)
+            })
+            .catch((err) => {
+                res.json(err)
+            })
     })
 
     /**

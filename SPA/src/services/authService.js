@@ -1,16 +1,21 @@
+import { actions } from 'react-redux-form'
+
 import baseService from './baseService'
-
 import * as constants from '../utilities/constants'
+import saveToLocalStorage from '../utilities/saveToLocalStorage'
 
-export function postAuthenticate(data, authError, authSuccess, redirectToChat) {
+export function postAuthenticate(data, redirectToChat) {
     return (dispatch) => {
         return baseService(constants.POST_METHOD, '/auth', data)
             .then((res) => {
-                if (res.data.message) {
-                    dispatch(authError(res))
+                if ('message' in res.data) {
+                    if (res.data.message.indexOf('Username') === 0) {
+                        setModelDirty(dispatch, 'deep.login.username', res.data.message)
+                    } else {
+                        setModelDirty(dispatch, 'deep.login.password', res.data.message)
+                    }
                 } else {
-                    dispatch(authSuccess(res))
-                    redirectToChat()
+                    setSuccessForm(dispatch, 'deep.login', res.data, redirectToChat)
                 }
             })
             .catch((err) => {
@@ -19,19 +24,29 @@ export function postAuthenticate(data, authError, authSuccess, redirectToChat) {
     }
 }
 
-export function postCreateAccount(data, authError, authSuccess, redirectToChat) {
+export function postCreateAccount(data, redirectToChat) {
     return (dispatch) => {
         return baseService(constants.POST_METHOD, '/auth/users', data)
             .then((res) => {
-                if (res.data.message) {
-                    dispatch(authError(res))
+                if ('message' in res.data) {
+                    setModelDirty(dispatch, 'deep.newAccount.username', res.data.message)
                 } else {
-                    dispatch(authSuccess(res))
-                    redirectToChat()
+                    setSuccessForm(dispatch, 'deep.newAccount', res.data, redirectToChat)
                 }
             })
             .catch((err) => {
                 console.log(err)
             })
     }
+}
+
+function setModelDirty(dispatch, model, data) {    
+    dispatch(actions.setErrors(model, data))    
+}
+
+function setSuccessForm(dispatch, model, data, redirectToChat) {
+    dispatch(actions.setSubmitted(model))
+    dispatch(actions.reset(model))
+    saveToLocalStorage(data)
+    redirectToChat()
 }

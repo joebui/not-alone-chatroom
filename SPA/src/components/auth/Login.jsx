@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { Button, FormControl } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
+import { Control, Form, Errors } from 'react-redux-form'
 
 import Header from '../shared/Header.jsx'
 import * as authAction from '../../actions/authAction'
@@ -9,36 +10,46 @@ import removeToken from '../../utilities/removeToken'
 class Login extends Component {
     componentWillMount() {
         removeToken()
-        this.props.dispatch(authAction.resetState())
     }
 
     render() {
-        const {auth} = this.props
+        const required = (val) => val && val.length
 
         return (
             <div>
                 <Header />
-                <div className="login-form">
+                <Form model="deep.login" onSubmit={(val) => this.handleLoginSubmit(val)} className="login-form">
+
                     <h2 className="form-signin-heading">LOG IN</h2>
-                    {auth.message ? <div className="alert alert-danger" role="alert">{auth.message}</div> : null}
-
-                    <FormControl id="username" name="username" type="text" placeholder="Username" onChange={authAction.updateUsername} maxLength="50"
-                        onKeyPress={(event) => this.pressEnter(event)} />
-                    {auth.usernameMessage ? <p className="text-danger">{auth.usernameMessage}</p> : <br />}
-
-                    <FormControl id="password" name="password" type="password" placeholder="Password" onChange={authAction.updatePassword} maxLength="50"
-                        onKeyPress={(event) => this.pressEnter(event)} />
-                    {auth.passwordMessage ? <p className="text-danger">{auth.passwordMessage}</p> : null}
+                    <Control.text model=".username" maxLength="50" className="form-control" placeholder="Username"
+                        validators={{
+                            required
+                        }}
+                        validateOn="change" />
+                    <Errors className="text-danger"
+                        model=".username"
+                        messages={{ required: "Username is required!" }}
+                        show="touched"
+                    />
 
                     <br />
-                    <Button bsStyle="primary" bsSize="large" block onClick={() => this.loginFormSubmit()}>Login</Button>
-                </div>
+
+                    <Control type="password" model=".password" maxLength="50" className="form-control" placeholder="Password"
+                        validators={{
+                            required
+                        }}
+                        validateOn="change" />
+                    <Errors className="text-danger"
+                        model=".password"
+                        messages={{ required: "Password is required!" }}
+                        show="touched"
+                    />
+
+                    <br />
+                    <Button bsStyle="primary" bsSize="large" block type="submit">Login</Button>
+                </Form>
             </div>
         )
-    }
-
-    componentWillUnmount() {
-        authAction.resetFieldValue()
     }
 
     redirectToChat() {
@@ -46,26 +57,12 @@ class Login extends Component {
         router.push('/')
     }
 
-    loginFormSubmit() {
+    handleLoginSubmit(value) {
         const {dispatch} = this.props
-        dispatch(authAction.authenticate(() => this.redirectToChat()))
-    }
-
-    pressEnter(event) {
-        if (event.key == 'Enter') {
-            this.loginFormSubmit()
-        }
+        dispatch(authAction.authenticate(value, () => this.redirectToChat()))
     }
 }
 
-Login.propTypes = {
-    auth: React.PropTypes.object.isRequired
-}
+Login.propTypes = {}
 
-function select(state) {
-    return {
-        auth: state.authReducer
-    }
-}
-
-export default connect(select)(Login)
+export default connect()(Login)
